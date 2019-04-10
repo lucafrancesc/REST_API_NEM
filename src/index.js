@@ -1,15 +1,26 @@
 /*jshint esversion: 6 */
-
 import 'dotenv/config';
-import cors from 'cors';
+// import cors from 'cors';
 import express from 'express';
 
 const app = express();
 
-app.use(cors());
+// app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get('/users', (req, res) => {
+  return res.send('Receive a GET HTTP method.');
+});
+
+app.post('/users', (req, res) => {
+  return res.send('Receive a POST HTTP method.');
+});
+
+app.put('/users', (req, res) => {
+  return res.send('Receive a PUT HTTP method.');
+});
+
+app.delete('/users', (req, res) => {
+  return res.send('Receive a DELETE HTTP method.');
 });
 
 app.listen(3000, () =>
