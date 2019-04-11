@@ -32,6 +32,10 @@ let messages = {
   },
 };
 
+app.get('/session', (req, res) => {
+  return res.send(users[req.me.id]);
+});
+
 app.get('/users', (req, res) => {
   return res.send(Object.values(users));
 });
@@ -82,6 +86,17 @@ app.put('/messages/:messageId', (req, res) => {
 
 app.delete('/messages/:messageId', (req, res) => {
   return res.send(`DELETE HTTP method on user/${req.params.messageId} resource`);
+});
+
+app.delete('/messages/:messageId', (req, res) => {
+  const {
+    [req.params.messageId]: message,
+    ...otherMessages
+  } = messages;
+
+  messages = otherMessages;
+
+  return res.send(message);
 });
 
 app.listen(3000, () =>
