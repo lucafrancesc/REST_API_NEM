@@ -1,11 +1,12 @@
 
 import 'dotenv/config';
-// import cors from 'cors';
 import express from 'express';
+import uuidv4 from 'uuid/v4';
+import bodyParser from 'body-parser';
 
 const app = express();
-
-// app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 let users = {
   1: {
@@ -60,7 +61,13 @@ app.get('/messages/:messageId', (req, res) => {
 });
 
 app.post('/messages', (req, res) => {
-  return res.send('Receive a POST HTTP method.');
+  const id = uuidv4();
+  const message = {
+    id,
+    text: req.body.text,
+  };
+  messages[id] = message;
+  return res.send(message);
 });
 
 app.put('/messages/:messageId', (req, res) => {
