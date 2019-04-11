@@ -52,6 +52,11 @@ app.delete('/users/:userId', (req, res) => {
   return res.send(`DELETE HTTP method on user/${req.params.userId} resource`);
 });
 
+app.use((req, res, next) => {
+  req.me = users[1];
+  next();
+});
+
 app.get('/messages', (req, res) => {
   return res.send(Object.values(messages));
 });
@@ -65,6 +70,7 @@ app.post('/messages', (req, res) => {
   const message = {
     id,
     text: req.body.text,
+    userId: req.me.id,
   };
   messages[id] = message;
   return res.send(message);
