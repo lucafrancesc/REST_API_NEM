@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import express from 'express';
 import bodyParser from 'body-parser';
-import models from './models';
 import routes from './routes';
+import models, { connectDb } from './models';
 
 const app = express();
 
@@ -20,6 +20,17 @@ app.use('/session', routes.session);
 app.use('/users', routes.user);
 app.use('/messages', routes.message);
 
-app.listen(3000, () =>
-  console.log(`Example app listening on port ${process.env.PORT}!`)
-);
+const eraseDatabaseOnSync = true;
+
+connectDb().then(async () => {
+  if (eraseDatabaseOnSync) {
+    await Promise.all([
+      models.User.deleteMany({}),
+      models.Message.deleteMany({}),
+    ]);
+  }
+
+  app.listen(process.env.PORT, () =>
+    console.log(`Example app listening on port ${process.env.PORT}!`),
+  );
+});
